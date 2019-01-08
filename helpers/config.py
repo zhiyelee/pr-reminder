@@ -19,8 +19,6 @@ try:
     SLACK_API_TOKEN = os.environ['SLACK_API_TOKEN']
     GITHUB_API_TOKEN = os.environ['GITHUB_API_TOKEN']
     ORGANIZATION = os.environ['ORGANIZATION']
-    print('debug message')
-    print(SLACK_API_TOKEN, GITHUB_API_TOKEN, ORGANIZATION)
 except KeyError as error:
     sys.stderr.write('Please set the environment variable {0}'.format(error))
     sys.exit(1)
