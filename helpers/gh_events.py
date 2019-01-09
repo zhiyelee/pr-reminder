@@ -1,5 +1,6 @@
 from message import send_to_slack_user
 from logger import logger, pp
+from user import User
 
 def gh_event_handler(event):
     event_action = event['action']
@@ -16,7 +17,10 @@ def review_requested_handler(event):
     pull_request = event['pull_request']
 
     # requested or removed reviewer
-    updated_reviewer = event['requested_reviewer']['login']
+    reviewer = User(event['requested_reviewer']['login'])
+    if reviewer.slack_id is None:
+        return
+
     sender = event['sender']['login']
 
     # pull request meta data
@@ -24,13 +28,13 @@ def review_requested_handler(event):
     pull_url = pull_request['html_url']
     pull_title = pull_request['title']
 
-    pull_str = '[#{0}: {1}]({2})'.format(pull_number, pull_title, pull_url)
+    pull_str = '<{2}|#{0}: {1}>'.format(pull_number, pull_title, pull_url)
 
     if event_action == 'review_requested':
         reminder_message = '{0} requested you to CR {1}'.format(sender, pull_str)
     elif event_action == 'review_request_removed':
         reminder_message = 'You are removed as a reviewer for PR {0}'.format(pull_str)
 
-    # send_to_slack_user(reminder_message, '@' + updated_reviewer)
+    send_to_slack_user(reminder_message, '@' + reviewer.slack_id)
     logger.info('remind message %s', reminder_message)
 
