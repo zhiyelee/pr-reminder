@@ -7,7 +7,7 @@ User=zhiye
 Group=www-data
 WorkingDirectory=/home/zhiye/code/pr-reminder
 Environment="PATH=/home/zhiye/code/pr-reminder/env/bin::/usr/bin:/sbin:/bin"
-ExecStart=dotenv /home/zhiye/code/pr-reminder/env/bin/gunicorn --workers 3 --bind unix:pr-reminder.sock -m 007 wsgi:app
+ExecStart=dotenv /home/zhiye/code/pr-reminder/env/bin/gunicorn --workers 3 --bind unix:pr-reminder.sock -m 007 wsgi:application
 
 [Install]
 WantedBy=multi-user.target
