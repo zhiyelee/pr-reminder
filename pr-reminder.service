@@ -1,0 +1,13 @@
+[Unit]
+Description=Gunicorn instance to serve pr-reminder
+After=network.target
+
+[Service]
+User=zhiye
+Group=www-data
+WorkingDirectory=/home/zhiye/code/pr-reminder
+Environment="PATH=/home/zhiye/code/pr-reminder/env/bin::/usr/bin:/sbin:/bin"
+ExecStart=dotenv /home/zhiye/code/pr-reminder/env/bin/gunicorn --workers 3 --bind unix:pr-reminder.sock -m 007 wsgi:app
+
+[Install]
+WantedBy=multi-user.target
