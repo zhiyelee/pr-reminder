@@ -14,6 +14,7 @@ SLACK_CHANNEL = os.environ.get('SLACK_CHANNEL', 'GEXT4PWUC')
 
 # python log level
 LOGLEVEL = os.environ.get("LOGLEVEL", "INFO")
+LOG_FILE = os.environ.get("LOG_FILE", "app.log")
 
 try:
     SLACK_API_TOKEN = os.environ['SLACK_API_TOKEN']

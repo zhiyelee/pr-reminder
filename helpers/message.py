@@ -1,6 +1,7 @@
 import requests
-from logger import logger
+from logger import logger, pp
 from config import (SLACK_CHANNEL, SLACK_API_TOKEN)
+import json
 
 POST_URL = 'https://slack.com/api/chat.postMessage'
 
@@ -24,14 +25,15 @@ def send_to_slack_channel(text, channel):
         raise Exception(answer['error'])
 
 
-def send_to_slack_user(text, slack_user):
+def send_to_slack_user(text, slack_user, attachments = []):
     payload = {
         'token': SLACK_API_TOKEN,
         'channel': slack_user,
         'username': 'Pull Request Reminder',
         'icon_emoji': ':bell:',
         'mrkdwn': True,
-        'text': text
+        'text': text,
+        'attachments': json.dumps(attachments),
     }
     logger.info(payload)
 
