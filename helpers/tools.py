@@ -1,10 +1,10 @@
 import os
 import sys
-import logging
+from logger import logger
 from datetime import datetime, timedelta
+from time import mktime
+from calendar import timegm
 from emojis import get_random_emoji
-
-logger = logging.getLogger(__name__)
 
 ignoreWords = os.environ.get('IGNORE_WORDS')
 IGNORE_WORDS = [i.lower().strip() for i in ignoreWords.split(',')] if ignoreWords else []
@@ -167,3 +167,9 @@ def get_reviewers_debt_section(pulls):
         lines.append(line.format(requested_reviewer, len(debt)))
     
     return section_head + '\n'.join(lines) + '\n============\n'
+
+def timestamp_from_utc_string(datetime_str):
+    return timegm(datetime.strptime(datetime_str, '%Y-%m-%dT%H:%M:%SZ').timetuple())
+
+def get_pull_request_string(pull_request):
+    return '<{0}|#{1}: {2}>'.format(pull_request['html_url'], pull_request['number'], pull_request['title'])
