@@ -169,7 +169,8 @@ def get_reviewers_debt_section(pulls):
     return section_head + '\n'.join(lines) + '\n============\n'
 
 def timestamp_from_utc_string(datetime_str):
-    return timegm(datetime.strptime(datetime_str, '%Y-%m-%dT%H:%M:%SZ').timetuple())
+    format_str = '%Y-%m-%dT%H:%M:%SZ' if datetime_str.endswith('Z') else '%Y-%m-%dT%H:%M:%S+00:00'
+    return timegm(datetime.strptime(datetime_str, format_str).timetuple())
 
-def get_pull_request_string(pull_request):
-    return '<{0}|#{1}: {2}>'.format(pull_request['html_url'], pull_request['number'], pull_request['title'])
+def get_pull_request_string(pr_url, pr_id, pr_title):
+    return '<{0}|#{1}: {2}>'.format(pr_url, pr_id, pr_title)

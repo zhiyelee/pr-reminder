@@ -16,6 +16,11 @@ SLACK_CHANNEL = os.environ.get('SLACK_CHANNEL', 'GEXT4PWUC')
 LOGLEVEL = os.environ.get("LOGLEVEL", "INFO")
 LOG_FILE = os.environ.get("LOG_FILE", "app.log")
 
+# redis config
+REDIS_HOST = os.environ.get("REDIS_HOST", "localhost")
+REDIS_PORT = os.environ.get('REDIS_PORT', '6379')
+REDIS_PASSWORD = os.environ.get('REDIS_PASSWORD', '0')
+
 try:
     SLACK_API_TOKEN = os.environ['SLACK_API_TOKEN']
     GITHUB_API_TOKEN = os.environ['GITHUB_API_TOKEN']
