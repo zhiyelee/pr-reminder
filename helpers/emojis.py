@@ -12,6 +12,11 @@ EMOJI_LIST = [
     ':cake:',
 ]
 
+NAMES_EMOJI = {
+    'upside_down_face': ':upside_down_face:',
+    'passenger_ship': ':passenger_ship:'
+}
+
 """
 get random emoji from the EMOJI_LIST
 """

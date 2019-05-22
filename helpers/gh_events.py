@@ -3,15 +3,25 @@ from logger import logger, pp
 from user import User
 from gh_api import get_review_comments
 from tools import get_pull_request_string, timestamp_from_utc_string
+from status_events_helper import on_ci_status_update, on_pr_update, store_pr_map
 
-def gh_event_handler(event):
-    event_action = event['action']
-    if event_action == 'review_requested' or event_action == 'review_request_removed':
-        review_requested_handler(event)
-    elif event_action == 'submitted':
-        review_submitted_handler(event)
+""" 
+event dispatcher
+"""
+def gh_event_handler(event_category, event):
+    event_action = event.get('action')
+    if event_category == 'status':
+        on_ci_status_update(event)
+    elif event_category == 'pull_request':
+        if event_action in ['opened', 'synchronize']:
+            on_pr_update(event)
     else:
-        logger.info('I am else of gh_event_handler')
+        if event_action in ['review_requested', 'review_request_removed']:
+            review_requested_handler(event)
+        elif event_action == 'submitted':
+            review_submitted_handler(event)
+        else:
+            logger.info('I am else of gh_event_handler')
 
 """
 review_requested and review_request_removed events handle
@@ -68,7 +78,7 @@ def review_submitted_handler(event):
     # get review comments asscociated with this reiview
     review_comments = get_review_comments(repo['owner']['login'], repo['name'], pull_request['number'], review['id'])
 
-    pull_str = get_pull_request_string(pull_request)
+    pull_str = get_pull_request_string(pull_request['html_url'], pull_request['number'], pull_request['title'])
     reviewer_slack_id = reviewer.github_id if reviewer.slack_id is None else reviewer.slack_id
     review_url = review['html_url']
 

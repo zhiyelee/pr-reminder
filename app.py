@@ -8,7 +8,7 @@ slackBot = SlackBot()
 
 @app.route('/')
 def hello():
-    return 'Hello World!'
+    return 'Hello World. pr-reminder!'
 
 @app.route('/slack/install', methods=['GET'])
 def pre_install():
@@ -45,7 +45,9 @@ def gh_events():
     """
     This route is called by github for events notifying
     """
-    gh_event_handler(request.json)
+    event_category = request.headers['X-GitHub-Event']
+    event = request.json
+    gh_event_handler(event_category, event)
 
     return 'I am listening.'
 
