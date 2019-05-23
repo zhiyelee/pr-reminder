@@ -73,12 +73,15 @@ def get_ci_result(repo_owner, repo_name, commit_sha):
     return 'success'
 
 def send_ci_update_message(pr, status, ci_updated_at):
+    # we can not notify when we don't know the slack id
+    if pr.owner.slack_id is None:
+        return
+
     pr_id = pr.number
     pr_title = pr.title
     pr_url = pr.html_url
     pull_str = get_pull_request_string(pr_url, pr_id, pr_title)
     message = 'Your PR {0} has CI update, check it out'.format(pull_str)
-    logger.info('mergebale %s', pr.mergeable)
 
     message_dict = {
         'success': {
@@ -109,4 +112,5 @@ def send_ci_update_message(pr, status, ci_updated_at):
         ],
     }]
 
+    logger.info('send an CI status notification to %s', pr.owner.slack_id)
     send_to_slack_user(message, '@' + pr.owner.slack_id, attachments)
