@@ -15,10 +15,10 @@ def gh_event_handler(event_category, event):
     elif event_category == 'pull_request':
         if event_action in ['opened', 'synchronize']:
             on_pr_update(event)
-    else:
-        if event_action in ['review_requested', 'review_request_removed']:
+        elif event_action in ['review_requested', 'review_request_removed']:
             review_requested_handler(event)
-        elif event_action == 'submitted':
+    else:
+        if event_action == 'submitted':
             review_submitted_handler(event)
         else:
             logger.info('I am else of gh_event_handler')
