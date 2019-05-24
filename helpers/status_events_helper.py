@@ -83,7 +83,7 @@ def send_ci_update_message(pr, status, ci_updated_at):
     pull_str = get_pull_request_string(pr_url, pr_id, pr_title)
     message = 'Your PR {0} has CI update, check it out'.format(pull_str)
 
-    message_dict = {
+    attachment_meta_dict = {
         'success': {
             'text': 'CI checks succeed!{0}'.format(NAMES_EMOJI['passenger_ship']),
             'color': '#22BE57',
@@ -93,7 +93,7 @@ def send_ci_update_message(pr, status, ci_updated_at):
             'text': 'Sorry, CI checks failed for your PR {0}'.format(NAMES_EMOJI['upside_down_face']),
         } ,
     }
-    message = message_dict[status]
+    attachment_meta = attachment_meta_dict[status]
 
     attachment_title = 'CI update for #{0}: {1}'.format(pr_id, pr_title)
 
@@ -101,9 +101,9 @@ def send_ci_update_message(pr, status, ci_updated_at):
         'fallback': attachment_title,
         'title': attachment_title,
         'title_link': pr_url,
-        'color': message['color'],
+        'color': attachment_meta['color'],
         'author_link': pr_url,
-        'text': message['text'],
+        'text': attachment_meta['text'],
         'footer': 'Pull Reminder',
         'ts': timestamp_from_utc_string(ci_updated_at),
         'mrkdwn_in': ['text'],
